@@ -1,4 +1,5 @@
 import Index from './views/index.vue';
+import Login from './views/login.vue';
 
 export default [
   {
@@ -7,13 +8,8 @@ export default [
     component: Index,
   },
   {
-    path: '/dt/:oid?',
-    name: 'dt',
-    component: () => import('./views/dt.vue'),
-  },
-  {
-    path: '/a2e/:oid?',
-    name: 'a2e',
-    component: () => import('./views/a2e.vue'),
+    path: '/login',
+    name: 'login',
+    component: Login,
   },
 ];

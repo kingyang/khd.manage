@@ -3,7 +3,7 @@ import Url from 'url-parse';
 export const baseApi = import.meta.env.APP_API as string;
 const apiBase = import.meta.env.APP_API as string;
 
-let token: string | undefined;
+let token: string | undefined = sessionStorage.getItem('token') as string;
 
 export const setToken = (str?: string) => {
   token = str;

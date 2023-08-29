@@ -37,7 +37,7 @@ export default defineConfig({
       ],
 
       // global imports to register
-      imports: ['vue', '@vueuse/core', '@vueuse/math'],
+      imports: ['vue', 'vue-router', '@vueuse/core', '@vueuse/math'],
       dts: './types/auto-imports.d.ts',
       dirs: ['./src/store', './src/auto', './src/api'],
       vueTemplate: true,

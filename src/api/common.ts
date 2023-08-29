@@ -22,13 +22,21 @@ export const getSts = (oid: string) => get<UploadConfig>('common/sts', { oid });
  */
 export type Order = {
   id: string;
-  orderid: string;
+  sType: string;
+  shop_id: string;
+  shop_orderTime: Date;
+  shop_orderid: string;
+  shop_username: string;
+  shop_extdata: string;
+  shop_pay: string;
+  serviceMark: string;
   serviceMsg: string;
+  serviceActiveTime: Date;
   fileLimit: number;
   userOptions: any;
+  userActiveTime: Date;
   createTime: Date;
   status: number;
-  files: OrderFile[];
 };
 
 export type OrderFile = {

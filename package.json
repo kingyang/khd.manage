@@ -16,6 +16,7 @@
     "@vueuse/core": "^10.4.1",
     "@vueuse/math": "^10.4.1",
     "@vueuse/router": "^10.4.1",
+    "dayjs": "^1.11.9",
     "element-plus": "^2.3.12",
     "file-saver": "^2.0.5",
     "lodash-unified": "^1.0.3",

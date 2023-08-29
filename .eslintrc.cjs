@@ -34,5 +34,6 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'vue/order-in-components': 2,
+    '@typescript-eslint/no-unused-vars': 'warn',
   },
 };
