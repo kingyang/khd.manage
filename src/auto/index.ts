@@ -18,3 +18,17 @@ export const fileSize = (size: number) => {
 function pow1024(num: number) {
   return Math.pow(1024, num);
 }
+
+// 定义一个函数，接受一个id参数
+export function scrollToId(id: string) {
+  // 获取元素
+  const element = document.getElementById(id);
+  // 判断元素是否存在
+  if (element) {
+    // 调用scrollIntoView方法，传入一个选项对象
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    // 打印错误信息
+    console.error('Element not found');
+  }
+}
