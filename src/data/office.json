@@ -1,0 +1,222 @@
+{
+  "title": "Office办公",
+  "icon": "fa-book",
+  "subMenu": [
+    {
+      "title": "Word文档",
+      "links": [
+        {
+          "title": "PDF转Word",
+          "desc": "把PDF文件转为可编辑的Word文档",
+          "url": "#/pdf2word",
+          "logo": "00.png"
+        },
+        {
+          "title": "Word转PDF",
+          "desc": "把Word文件转换为PDF文件",
+          "url": "#/word2pdf",
+          "logo": "05.png"
+        },
+        {
+          "title": "图片转Word",
+          "desc": "提取图片中的文字内容保存为Word文档",
+          "url": "#/image2word",
+          "logo": "22.png"
+        }
+      ]
+    },
+    {
+      "title": "Excel文档",
+      "links": [
+        {
+          "title": "PDF转Excel",
+          "desc": "把PDF文件转为可编辑的Excel文档",
+          "url": "#/pdf2excel",
+          "logo": "01.png"
+        },
+        {
+          "title": "Excel转PDF",
+          "desc": "把Excel文档转换为PDF文件",
+          "url": "#/excel2pdf",
+          "logo": "06.png"
+        },
+        {
+          "title": "图片转Excel",
+          "desc": "提取图片中的文字内容保存为Excel文件",
+          "url": "#/image2excel",
+          "logo": "27.png"
+        }
+      ]
+    },
+    {
+      "title": "PPT文档",
+      "links": [
+        {
+          "title": "PDF转PPT",
+          "desc": "把PDF文件转为可编辑的PPT文档",
+          "url": "#/pdf2ppt",
+          "logo": "02.png"
+        },
+        {
+          "title": "PPT转PDF",
+          "desc": "把PPT文档转换为PDF文件",
+          "url": "#/ppt2pdf",
+          "logo": "07.png"
+        },
+        {
+          "title": "PPT转长图",
+          "desc": "将PPT文档转为长图",
+          "url": "#/pdf2image2",
+          "logo": "25.png"
+        }
+      ]
+    },
+    {
+      "title": "PDF文档",
+      "links": [
+        {
+          "title": "PDF转Word",
+          "desc": "把PDF文件转为可编辑的Word文档",
+          "url": "#/pdf2word",
+          "logo": "00.png"
+        },
+        {
+          "title": "PDF转Excel",
+          "desc": "把PDF文件转为可编辑的Excel文档",
+          "url": "#/pdf2excel",
+          "logo": "01.png"
+        },
+        {
+          "title": "PDF转PPT",
+          "desc": "把PDF文件转为可编辑的PPT文档",
+          "url": "#/pdf2ppt",
+          "logo": "02.png"
+        },
+        {
+          "title": "PDF转HTML",
+          "desc": "把PDF文件转为可在浏览器查看的HTML文件",
+          "url": "#/pdf2html",
+          "logo": "04.png"
+        },
+        {
+          "title": "PDF转图片",
+          "desc": "将PDF每一页存为不同的图片",
+          "url": "#/pdf2image",
+          "logo": "03.png"
+        },
+        {
+          "title": "图片转PDF",
+          "desc": "把JPG、PNG、BMP、GIF图像转换为PDF文件",
+          "url": "#/image2pdf",
+          "logo": "08.png"
+        },
+        {
+          "title": "PDF合并",
+          "desc": "把多个PDF文档合并成一个PDF文件",
+          "url": "#/pdfmerge",
+          "logo": "10.png"
+        },
+        {
+          "title": "PDF拆分",
+          "desc": "从PDF文档提取特定页面或将每一页分别存储为不同的PDF文件",
+          "url": "#/pdfsplit",
+          "logo": "11.png"
+        },
+        {
+          "title": "PDF压缩",
+          "desc": "缩减PDF文件的大小且不牺牲文件质量",
+          "url": "#/pdfcompress",
+          "logo": "26.png"
+        },
+        {
+          "title": "PDF加密",
+          "desc": "为PDF文件添加密码或加密",
+          "url": "#/pdfpw",
+          "logo": "13.png"
+        },
+        {
+          "title": "PDF插入页面",
+          "desc": "插入PDF文件的一页或多个页面",
+          "url": "#/pdfaddpage",
+          "logo": "15.png"
+        },
+        {
+          "title": "PDF删除页面",
+          "desc": "删除PDF文件的一页或多个页面",
+          "url": "#/pdfremovepage",
+          "logo": "16.png"
+        },
+        {
+          "title": "PDF删除水印",
+          "desc": "去除PDF文件的水印",
+          "url": "#/pdfremovemark",
+          "logo": "18.png"
+        },
+        {
+          "title": "PDF修改密码",
+          "desc": "修改PDF文件的密码",
+          "url": "#/pdfpwedit",
+          "logo": "14.png"
+        },
+        {
+          "title": "PDF转CAD",
+          "desc": "将PDF文件转换为CAD文件",
+          "url": "#/pdf2cad",
+          "logo": "21.png"
+        }
+      ]
+    },
+    {
+      "title": "图片处理",
+      "links": [
+        {
+          "title": "图片转Word",
+          "desc": "提取图片中的文字内容保存为Word文档",
+          "url": "#/image2word",
+          "logo": "22.png"
+        },
+        {
+          "title": "图片转Excel",
+          "desc": "提取图片中的文字内容保存为Excel文件",
+          "url": "#/image2excel",
+          "logo": "27.png"
+        },
+        {
+          "title": "图片转文字",
+          "desc": "提取图片中的文字内容保存为TXT文件",
+          "url": "#/image2txt",
+          "logo": "23.png"
+        },
+        {
+          "title": "PPT转长图",
+          "desc": "将PPT文档转为长图",
+          "url": "#/pdf2image2",
+          "logo": "25.png"
+        }
+      ]
+    },
+    {
+      "title": "CAD转换",
+      "links": [
+        {
+          "title": "PDF转CAD",
+          "desc": "将PDF文件转换为CAD文件",
+          "url": "#/pdf2cad",
+          "logo": "21.png"
+        },
+        {
+          "title": "CAD转PDF",
+          "desc": "把CAD文件转换为PDF文件",
+          "url": "#/cad2pdf",
+          "logo": "19.png"
+        },
+        {
+          "title": "CAD转图片",
+          "desc": "把CAD文件转换为JPG、PNG图片格式",
+          "url": "#/cad2image",
+          "logo": "20.png"
+        }
+      ]
+    }
+  ]
+}

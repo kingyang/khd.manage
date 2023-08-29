@@ -1,0 +1,66 @@
+{
+  "name": "english.subtitle",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite --force",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "lint:prettier": "prettier --write  \"src/**/*.{ts,tsx,vue,js}\"",
+    "lint:eslint": "eslint \"./src/**/*.{ts,tsx,vue,js}\" --fix --format codeframe",
+    "lint": "pnpm lint:eslint&& pnpm lint:prettier"
+  },
+  "dependencies": {
+    "@vue/shared": "^3.3.4",
+    "@vueuse/core": "^10.4.1",
+    "@vueuse/math": "^10.4.1",
+    "@vueuse/router": "^10.4.1",
+    "element-plus": "^2.3.12",
+    "file-saver": "^2.0.5",
+    "lodash-unified": "^1.0.3",
+    "split.js": "^1.6.5",
+    "url-parse": "^1.5.10",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@iconify-json/ep": "^1.1.12",
+    "@types/file-saver": "^2.0.5",
+    "@types/node": "^20.5.7",
+    "@types/url-parse": "^1.4.8",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "@vitejs/plugin-vue": "^4.3.3",
+    "@vitejs/plugin-vue-jsx": "^3.0.2",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "eslint": "^8.48.0",
+    "eslint-formatter-codeframe": "^7.32.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-simple-import-sort": "10.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "less": "^4.2.0",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.2",
+    "rollup-plugin-external-globals": "^0.8.0",
+    "rollup-plugin-visualizer": "^5.9.2",
+    "sass": "^1.66.1",
+    "stylelint": "^15.10.3",
+    "typescript": "^5.2.2",
+    "unocss": "^0.55.3",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-icons": "^0.16.6",
+    "unplugin-vue-components": "^0.25.1",
+    "vite": "^4.4.9",
+    "vite-plugin-cdn-import": "^0.3.5",
+    "vite-plugin-eslint": "^1.8.1",
+    "vue-tsc": "^1.8.8"
+  },
+  "lint-staged": {
+    "src/**/*.{vue,ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
