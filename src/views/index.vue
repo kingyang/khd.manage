@@ -16,6 +16,7 @@ const shops: Record<string, string> = {
   2: '康',
 };
 const shopArr = Object.entries(shops);
+
 const sTypes: Record<string, string> = {
   a2e: '转Word',
   dt: '文档翻译',
@@ -34,11 +35,11 @@ const statuses: Record<string, string> = {
   '50': '处理完毕',
   '90': '关闭',
 };
+
 const statusArr: [number, string][] = Object.entries(statuses).map(i => [
   parseInt(i[0]),
   i[1],
 ]);
-
 const refMain = ref<HTMLElement>();
 const refLeft = ref<HTMLElement>();
 const refContent = ref<HTMLElement>();
@@ -50,6 +51,7 @@ const state = reactive({
   form: {} as Order,
   isNew: false,
   files: [] as OrderFile[],
+  page: 1,
 });
 
 const form = ref<Partial<Order>>({
@@ -57,11 +59,26 @@ const form = ref<Partial<Order>>({
   status: statusArr[0][0],
   fileLimit: 1,
 });
+
+const filters = ref<Partial<Order> & { keyword?: string }>({});
 const router = useRouter();
 const { copy } = useClipboard();
 
+watch(
+  () => [filters.value, state.page],
+  () => {
+    loadOrders();
+  },
+  {
+    deep: true,
+  },
+);
+
 const loadOrders = async () => {
-  const { total, data } = await getOrders();
+  const { total, data } = await getOrders({
+    page: state.page,
+    ...filters.value,
+  });
   state.total = total;
   state.data = data;
 };
@@ -79,16 +96,17 @@ const timeFormatter = (_order: Order, _column: any, cellValue: Date) => {
   return dayjs().to(cellValue) as string;
 };
 
+const orderUrl = (order: Order) =>
+  import.meta.env.MODE === 'development'
+    ? `http://localhost:5174/#/${order.sType}/${order.id}`
+    : `https://s.eed.cn/#/${order.sType}/${order.id}`;
+
 /**
  * 用户链接
  * @param order
  */
 const onOrderUserLink = async (order: Order) => {
-  const url =
-    import.meta.env.MODE === 'development'
-      ? `http://localhost:5174/#/${order.sType}/${order.id}`
-      : `https://s.eed.cn/#/${order.sType}/${order.id}`;
-  await copy(`${url}
+  await copy(`${orderUrl(order)}
 【使用方法】
 【1】点击上面链接打开(或复制到PC或手机浏览器)
 【2】根据页面提示进行操作
@@ -108,8 +126,7 @@ const onOrderFahuo = async (order: Order) => {
     item.status = 20;
     item.serviceActiveTime = new Date();
   }
-  const url = `https://s.eed.cn/#/${order.sType}/${order.id}`;
-  await copy(`${url}
+  await copy(`${orderUrl(order)}
 【使用方法】
 【1】点击上面链接打开(或复制到PC或手机浏览器)
 【2】根据页面提示进行操作
@@ -179,7 +196,11 @@ const sysFilesStatus: Record<string, string> = {
 const sysFilesStatusArr = Object.entries(sysFilesStatus);
 
 const onFileStatusChange = async (orderFile: OrderFile, status: any) => {
-  orderFile.status = status;
+  const res = await updateOrderFile(orderFile.id, status);
+  console.debug('onFileStatusChange', res);
+  if (res) {
+    orderFile.status = status;
+  }
 };
 
 const fileSizeFormatter = (row: any) => {
@@ -285,73 +306,126 @@ onMounted(() => {
 <template>
   <div ref="refMain" class="w-full h-full orders">
     <div ref="refLeft">
-      <div>
-        <el-button type="primary" size="small" @click.prevent="onOrderNew">
-          新建订单
-        </el-button>
-      </div>
-      <el-table :data="state.data" style="width: 100%" @row-click="onRowClick">
-        <el-table-column fixed="left" width="160">
-          <template #default="scope">
-            <el-button
-              v-if="scope.row.status === 19"
-              link
-              type="primary"
-              size="small"
-              @click.prevent="onOrderFahuo(scope.row)"
-            >
-              <span class="c-green">发货</span>
-            </el-button>
-            <el-button
-              v-else
-              link
-              type="primary"
-              size="small"
-              @click.prevent="onOrderUserLink(scope.row)"
-            >
-              <span>链接</span>
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态"
-          width="100"
-          :formatter="statusFormatter"
-        />
-        <el-table-column prop="id" label="编号" width="140" />
-        <el-table-column
-          prop="sType"
-          label="业务"
-          width="140"
-          :formatter="sTypeFormatter"
-        />
-        <el-table-column
-          prop="serviceActiveTime"
-          label="服务时间"
-          width="100"
-          :formatter="timeFormatter"
-        />
+      <div class="flex flex-col h-full">
+        <div class="p-5">
+          <el-button type="primary" size="small" @click.prevent="onOrderNew">
+            新建订单
+          </el-button>
 
-        <el-table-column
-          prop="userActiveTime"
-          label="用户活动"
-          width="100"
-          :formatter="timeFormatter"
+          <span class="ml-10px"> 店铺: </span>
+          <el-select v-model="filters.shop_id" class="w-100px" clearable>
+            <el-option
+              v-for="(item, i) in shopArr"
+              :key="i"
+              :label="item[1]"
+              :value="item[0]"
+            />
+          </el-select>
+          <span class="ml-10px"> 业务: </span>
+          <el-select v-model="filters.sType" class="w-100px" clearable>
+            <el-option
+              v-for="(item, i) in sTypeArr"
+              :key="i"
+              :label="item[1]"
+              :value="item[0]"
+            />
+          </el-select>
+          <span class="ml-5px"> 状态: </span>
+          <el-select v-model="filters.status" class="w-100px" clearable>
+            <el-option
+              v-for="(item, i) in statusArr"
+              :key="i"
+              :label="item[1]"
+              :value="item[0]"
+            />
+          </el-select>
+          <span class="ml-5px"> 订单: </span>
+          <el-input
+            v-model="filters.keyword"
+            placeholder="订单信息"
+            class="w-200px"
+            clearable
+          />
+        </div>
+        <div class="flex-auto overflow-y-auto">
+          <el-table
+            :data="state.data"
+            stripe
+            highlight-current-row
+            style="width: 100%"
+            @row-click="onRowClick"
+          >
+            <el-table-column fixed="left" width="160">
+              <template #default="scope">
+                <a :href="`${orderUrl(scope.row)}?from=admin`" target="_blank">
+                  打开
+                </a>
+                <el-button
+                  v-if="scope.row.status === 19"
+                  link
+                  type="primary"
+                  size="small"
+                  @click.prevent="onOrderFahuo(scope.row)"
+                >
+                  <span class="c-green">发货</span>
+                </el-button>
+                <el-button
+                  v-else
+                  link
+                  type="primary"
+                  size="small"
+                  @click.prevent="onOrderUserLink(scope.row)"
+                >
+                  <span>链接</span>
+                </el-button>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="status"
+              label="状态"
+              width="100"
+              :formatter="statusFormatter"
+            />
+            <el-table-column prop="id" label="编号" width="140" />
+            <el-table-column
+              prop="sType"
+              label="业务"
+              width="140"
+              :formatter="sTypeFormatter"
+            />
+            <el-table-column
+              prop="serviceActiveTime"
+              label="服务时间"
+              width="100"
+              :formatter="timeFormatter"
+            />
+
+            <el-table-column
+              prop="userActiveTime"
+              label="用户活动"
+              width="100"
+              :formatter="timeFormatter"
+            />
+            <el-table-column
+              prop="createTime"
+              label="创建时间"
+              width="100"
+              :formatter="timeFormatter"
+            />
+            <el-table-column prop="fileLimit" label="文件数量" width="100" />
+            <el-table-column prop="serviceMark" label="备注" width="200" />
+            <el-table-column prop="serviceMsg" label="消息" width="200" />
+            <el-table-column label="订单信息" width="200" />
+            <!-- <el-table-column prop="userOptions" label="用户选项" /> -->
+          </el-table>
+        </div>
+        <el-pagination
+          v-model:current-page="state.page"
+          layout="prev, pager, next"
+          :total="state.total"
+          :page-size="50"
         />
-        <el-table-column
-          prop="createTime"
-          label="创建时间"
-          width="100"
-          :formatter="timeFormatter"
-        />
-        <el-table-column prop="fileLimit" label="文件数量" width="100" />
-        <el-table-column prop="serviceMark" label="备注" width="200" />
-        <el-table-column prop="serviceMsg" label="消息" width="200" />
-        <el-table-column label="订单信息" width="200" />
-        <el-table-column prop="userOptions" label="用户选项" />
-      </el-table>
-      <el-pagination layout="prev, pager, next" :total="state.total" />
+      </div>
     </div>
     <div ref="refContent">
       <div class="flex h-full">
@@ -362,9 +436,13 @@ onMounted(() => {
           <div class="mt-10px" @click="scrollToId('sysfiles')">系统文件</div>
           <div class="mt-10px" @click="scrollToId('logs')">处理日志</div>
         </div>
-        <div class="h-full overflow-y-auto flex-auto">
+        <div class="flex-auto overflow-y-auto">
           <div>
+            <div class="mt-5">
+              编号:<span class="ml-5">{{ form.id }}</span>
+            </div>
             <el-divider id="base" content-position="left">基本信息</el-divider>
+
             <el-form :model="form" label-width="120px">
               <el-form-item label="服务类型">
                 <el-select v-model="form.sType">
@@ -578,6 +656,7 @@ onMounted(() => {
 </template>
 <style lang="scss" scoped>
 .orders {
+  font-size: 14px;
   :deep(.el-divider__text) {
     color: gray;
     font-weight: bold;

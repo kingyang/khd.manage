@@ -57,6 +57,14 @@ export const getOrderFiles = (id: string) =>
 export const updateOrder = (args: Partial<Order>) =>
   post<{ id: string }>('orders/update', args);
 
+/**
+ * 更新文件信息
+ * @param args
+ * @returns
+ */
+export const updateOrderFile = (id: string, status: any) =>
+  post<OrderFile[]>('orders/file', { id, status });
+
 export type UploadConfig = {
   /**
    * 上传的地址
