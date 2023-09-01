@@ -27,8 +27,13 @@ const statuses: Record<string, string> = {
   '10': '待付费',
   '19': '待发货',
   '20': '用户提交',
-  '30': '处理中',
-  '35': '处理(待审核)',
+  '30': '处理(自动待)',
+  '31': '处理(自动中)',
+  '32': '处理(异常)',
+  '35': '处理(人工待)',
+  '36': '处理(人工中)',
+  '37': '处理(人工异常)',
+  '38': '处理(待审核)',
   '40': '异常',
   '41': '异常(用户重新提交)',
   '42': '异常(费用不足)',
@@ -355,7 +360,7 @@ onMounted(() => {
             style="width: 100%"
             @row-click="onRowClick"
           >
-            <el-table-column fixed="left" width="160">
+            <el-table-column fixed="left" width="120">
               <template #default="scope">
                 <a :href="`${orderUrl(scope.row)}?from=admin`" target="_blank">
                   打开
@@ -383,7 +388,7 @@ onMounted(() => {
             <el-table-column
               prop="status"
               label="状态"
-              width="100"
+              width="160"
               :formatter="statusFormatter"
             />
             <el-table-column prop="id" label="编号" width="140" />
@@ -558,7 +563,7 @@ onMounted(() => {
                 :formatter="fileNameFormatter"
               >
               </el-table-column>
-              <el-table-column prop="fileMimeType" label="Mime" width="180" />
+              <el-table-column prop="fileExt" label="后缀" width="180" />
               <el-table-column
                 v-if="!isSmallScreen"
                 prop="fileSize"

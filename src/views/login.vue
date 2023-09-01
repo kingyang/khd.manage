@@ -9,7 +9,6 @@ import EpUserFilled from '~icons/ep/user-filled';
 
 const ruleFormRef = ref<FormInstance>();
 const loading = ref(false);
-const checked = ref(false);
 const ruleForm = reactive({
   username: '',
   password: '',
@@ -121,9 +120,6 @@ const onLogin = async (formEl: FormInstance | undefined) => {
             </el-form-item>
 
             <el-form-item>
-              <div class="w-full h-[20px] flex justify-between items-center">
-                <el-checkbox v-model="checked"> 记住密码 </el-checkbox>
-              </div>
               <el-button
                 class="w-full mt-4"
                 size="default"
