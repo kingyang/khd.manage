@@ -50,6 +50,7 @@ export const getOrderFiles = (id: string) =>
   get<{
     order: Order;
     files: OrderFile[];
+    logs: any[];
   }>('orders/getByid', { id });
 
 /**

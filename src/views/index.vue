@@ -41,6 +41,16 @@ const statuses: Record<string, string> = {
   '90': '关闭',
 };
 
+const loadTimerArr = [
+  [0, '关闭'],
+  [5, '5s'],
+  [10, '10s'],
+  [20, '20s'],
+  [30, '30s'],
+  [40, '40s'],
+  [50, '50s'],
+  [60, '60s'],
+];
 const statusArr: [number, string][] = Object.entries(statuses).map(i => [
   parseInt(i[0]),
   i[1],
@@ -57,6 +67,8 @@ const state = reactive({
   isNew: false,
   files: [] as OrderFile[],
   page: 1,
+  loadTimer: 20,
+  logs: [] as { createTime: string; msg: string }[],
 });
 
 const form = ref<Partial<Order>>({
@@ -99,6 +111,12 @@ const timeFormatter = (_order: Order, _column: any, cellValue: Date) => {
     return '';
   }
   return dayjs().to(cellValue) as string;
+};
+const timeFormatter2 = (_order: Order, _column: any, cellValue: Date) => {
+  if (!cellValue) {
+    return '';
+  }
+  return dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss');
 };
 
 const orderUrl = (order: Order) =>
@@ -151,16 +169,17 @@ const onRowClick = async (order?: Partial<Order>) => {
   form.value = { ...order };
   if (order?.id) {
     state.isNew = false;
-    const { order: loadOrder, files } = await getOrderFiles(order.id);
+    const { order: orderloadEd, files, logs } = await getOrderFiles(order.id);
     state.files = files;
+    state.logs = logs;
     const item = state.data.find(o => o.id === order.id);
     //@ts-ignore
-    for (const k of loadOrder) {
+    for (const k in orderloadEd) {
       //@ts-ignore
-      item[k] = loadOrder[k];
+      item[k] = orderloadEd[k];
     }
 
-    form.value = { ...loadOrder };
+    form.value = { ...orderloadEd };
   } else {
     state.isNew = true;
     state.files = [];
@@ -311,6 +330,17 @@ const onBeforeUpload = async () => {
 };
 const downUrl = (file: OrderFile) =>
   `${baseApi}common/down?oid=${form.value.id}&fid=${file.id}`;
+
+let loadTimer = 0;
+watch(
+  () => state.loadTimer,
+  () => {
+    clearTimeout(loadTimer);
+    if (state.loadTimer) {
+      loadTimer = window.setTimeout(loadOrders, state.loadTimer * 1000);
+    }
+  },
+);
 onMounted(() => {
   if (!sessionStorage.getItem('token')) {
     router.push('/login');
@@ -367,9 +397,18 @@ onMounted(() => {
           <el-input
             v-model="filters.keyword"
             placeholder="订单信息"
-            class="w-200px!"
+            class="w-140px!"
             clearable
           />
+          <span class="ml-5px"> 加载: </span>
+          <el-select v-model="state.loadTimer" class="w-100px" clearable>
+            <el-option
+              v-for="(item, i) in loadTimerArr"
+              :key="i"
+              :label="item[1]"
+              :value="item[0]"
+            />
+          </el-select>
         </div>
         <div class="flex-auto overflow-y-auto">
           <el-table
@@ -583,21 +622,12 @@ onMounted(() => {
               >
                 <template #default="scope">
                   <a :href="downUrl(scope.row)" target="_blank" class="ml-5">
-                    查看
+                    {{ fileNameFormatter(scope.row) }}
                   </a>
-                  <!-- <a
-                    :href="downUrl(scope.row, '1')"
-                    target="_blank"
-                    class="ml-5"
-                  >
-                    下载
-                  </a> -->
-                  <span class="ml-5"> {{ fileNameFormatter(scope.row) }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="fileExt" label="后缀" width="180" />
+              <el-table-column prop="fileExt" label="后缀" width="80" />
               <el-table-column
-                v-if="!isSmallScreen"
                 prop="fileSize"
                 label="大小"
                 width="100"
@@ -622,7 +652,7 @@ onMounted(() => {
               style="width: 100%"
               max-height="250"
             >
-              <el-table-column label="状态" width="100">
+              <el-table-column label="状态" width="140">
                 <template #default="scope">
                   <el-popover placement="right" :width="400" trigger="click">
                     <template #reference>
@@ -654,20 +684,12 @@ onMounted(() => {
               >
                 <template #default="scope">
                   <a :href="downUrl(scope.row)" target="_blank" class="ml-5">
-                    查看
+                    {{ fileNameFormatter(scope.row) }}
                   </a>
-                  <!-- <a
-                    :href="downUrl(scope.row, '1')"
-                    target="_blank"
-                    class="ml-5"
-                  >
-                    下载
-                  </a> -->
-                  <span class="ml-5"> {{ fileNameFormatter(scope.row) }}</span>
                 </template>
               </el-table-column>
+              <el-table-column prop="fileExt" label="后缀" width="80" />
               <el-table-column
-                v-if="!isSmallScreen"
                 prop="fileSize"
                 label="大小"
                 width="100"
@@ -698,6 +720,22 @@ onMounted(() => {
             <el-divider id="logs" content-position="left">
               处理日志
             </el-divider>
+            <el-table :data="state.logs" stripe style="width: 100%">
+              <el-table-column
+                prop="createTime"
+                label="时间"
+                width="100"
+                :formatter="timeFormatter"
+              />
+              <el-table-column
+                prop="createTime"
+                label="时间"
+                width="200"
+                :formatter="timeFormatter2"
+              />
+              <el-table-column prop="msg" label="消息" />
+              <template #empty> 暂无数据 </template>
+            </el-table>
           </div>
         </div>
       </div>
