@@ -151,7 +151,16 @@ const onRowClick = async (order?: Partial<Order>) => {
   form.value = { ...order };
   if (order?.id) {
     state.isNew = false;
-    state.files = await getOrderFiles(order.id);
+    const { order: loadOrder, files } = await getOrderFiles(order.id);
+    state.files = files;
+    const item = state.data.find(o => o.id === order.id);
+    //@ts-ignore
+    for (const k of loadOrder) {
+      //@ts-ignore
+      item[k] = loadOrder[k];
+    }
+
+    form.value = { ...loadOrder };
   } else {
     state.isNew = true;
     state.files = [];
@@ -263,7 +272,16 @@ const onUploadError = (
   notify.error(`${uploadFile.name} ${error.message}`);
 };
 const loadOrderDebounce = useDebounceFn(async () => {
-  if (form.value.id) state.files = await getOrderFiles(form.value.id);
+  if (form.value.id) {
+    const { order: loadOrder, files } = await getOrderFiles(form.value.id);
+    state.files = files;
+    const item = state.data.find(o => o.id === form.value.id);
+    //@ts-ignore
+    for (const k of loadOrder) {
+      //@ts-ignore
+      item[k] = loadOrder[k];
+    }
+  }
 }, 2000);
 
 /**
@@ -291,7 +309,8 @@ const onBeforeUpload = async () => {
     sts.value = await getSts();
   }
 };
-
+const downUrl = (file: OrderFile) =>
+  `${baseApi}common/down?oid=${form.value.id}&fid=${file.id}`;
 onMounted(() => {
   if (!sessionStorage.getItem('token')) {
     router.push('/login');
@@ -348,7 +367,7 @@ onMounted(() => {
           <el-input
             v-model="filters.keyword"
             placeholder="订单信息"
-            class="w-200px"
+            class="w-200px!"
             clearable
           />
         </div>
@@ -562,6 +581,19 @@ onMounted(() => {
                 label="文件"
                 :formatter="fileNameFormatter"
               >
+                <template #default="scope">
+                  <a :href="downUrl(scope.row)" target="_blank" class="ml-5">
+                    查看
+                  </a>
+                  <!-- <a
+                    :href="downUrl(scope.row, '1')"
+                    target="_blank"
+                    class="ml-5"
+                  >
+                    下载
+                  </a> -->
+                  <span class="ml-5"> {{ fileNameFormatter(scope.row) }}</span>
+                </template>
               </el-table-column>
               <el-table-column prop="fileExt" label="后缀" width="180" />
               <el-table-column
@@ -620,6 +652,19 @@ onMounted(() => {
                 label="文件"
                 :formatter="fileNameFormatter"
               >
+                <template #default="scope">
+                  <a :href="downUrl(scope.row)" target="_blank" class="ml-5">
+                    查看
+                  </a>
+                  <!-- <a
+                    :href="downUrl(scope.row, '1')"
+                    target="_blank"
+                    class="ml-5"
+                  >
+                    下载
+                  </a> -->
+                  <span class="ml-5"> {{ fileNameFormatter(scope.row) }}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 v-if="!isSmallScreen"

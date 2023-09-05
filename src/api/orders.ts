@@ -47,7 +47,10 @@ export const getOrders = (args?: any) =>
  * @returns
  */
 export const getOrderFiles = (id: string) =>
-  get<OrderFile[]>('orders/files', { id });
+  get<{
+    order: Order;
+    files: OrderFile[];
+  }>('orders/getByid', { id });
 
 /**
  *更新订单
