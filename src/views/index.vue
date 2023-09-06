@@ -131,7 +131,7 @@ const orderUrl = (order: Order) =>
 const onOrderUserLink = async (order: Order) => {
   await copy(`${orderUrl(order)}
 【使用方法】
-【1】点击上面链接打开(或复制到PC或手机浏览器)
+【1】点击上面链接打开(推荐PC或手机浏览器)
 【2】根据页面提示进行操作
 【3】有疑问随时旺旺沟通`);
   notify.success(
@@ -151,7 +151,7 @@ const onOrderFahuo = async (order: Order) => {
   }
   await copy(`${orderUrl(order)}
 【使用方法】
-【1】点击上面链接打开(或复制到PC或手机浏览器)
+【1】点击上面链接打开(推荐PC或手机浏览器)
 【2】根据页面提示进行操作
 【3】有疑问随时旺旺沟通`);
   notify.success(
