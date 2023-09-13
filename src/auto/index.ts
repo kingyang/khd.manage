@@ -32,3 +32,20 @@ export function scrollToId(id: string) {
     console.error('Element not found');
   }
 }
+
+export const object2array = (obj: any) => {
+  const arr: any[] = [];
+  for (const key in obj) {
+    arr.push([key, obj[key]]);
+  }
+  return arr;
+};
+
+export const array2object = (arr: any) => {
+  const obj: Record<any, any> = {};
+  for (const item of arr) {
+    const [key, val] = item;
+    obj[key] = val;
+  }
+  return obj;
+};

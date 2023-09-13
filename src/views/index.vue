@@ -23,24 +23,25 @@ const sTypes: Record<string, string> = {
 };
 
 const sTypeArr = Object.entries(sTypes);
-const statuses: Record<string, string> = {
-  '10': '待付费',
-  '19': '待发货',
-  '20': '用户提交',
-  '30': '处理(自动待)',
-  '31': '处理(自动中)',
-  '32': '处理(异常)',
-  '35': '处理(人工待)',
-  '36': '处理(人工中)',
-  '37': '处理(人工异常)',
-  '38': '处理(待审核)',
-  '40': '异常',
-  '41': '异常(用户重新提交)',
-  '42': '异常(费用不足)',
-  '50': '处理完毕',
-  '90': '关闭',
-};
 
+const statusArr: [number, string][] = [
+  [10, '待付费'],
+  [19, '待发货'],
+  [20, '用户提交'],
+  [30, '处理(自动待)'],
+  [31, '处理(自动中)'],
+  [32, '处理(异常)'],
+  [35, '处理(人工待)'],
+  [36, '处理(人工中)'],
+  [37, '处理(人工异常)'],
+  [38, '处理(待审核)'],
+  [50, '处理完毕'],
+  [40, '异常'],
+  [41, '异常(用户重新提交)'],
+  [42, '异常(费用不足)'],
+  [90, '关闭'],
+];
+const statuses: Record<string, string> = array2object(statusArr);
 const loadTimerArr = [
   [0, '关闭'],
   [5, '5s'],
@@ -51,10 +52,7 @@ const loadTimerArr = [
   [50, '50s'],
   [60, '60s'],
 ];
-const statusArr: [number, string][] = Object.entries(statuses).map(i => [
-  parseInt(i[0]),
-  i[1],
-]);
+
 const refMain = ref<HTMLElement>();
 const refLeft = ref<HTMLElement>();
 const refContent = ref<HTMLElement>();
@@ -275,7 +273,7 @@ const httpRequest = (options: UploadRequestOptions) => {
     notify.error('上传失败,未知订单');
     throw new Error('上传失败,未知订单');
   }
-  const key = `${sts.value.key}${oid}/out/${options.file.name}`;
+  const key = `${sts.value.key}${oid}/output/${options.file.name}`;
 
   return ajaxUpload({
     ...options,
